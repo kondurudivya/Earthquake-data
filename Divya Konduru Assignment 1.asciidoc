@@ -1,0 +1,244 @@
++*In[3]:*+
+[source, ipython3]
+----
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df=pd.read_csv('earthquake_dataset.csv')
+print(df)
+----
+
+
++*Out[3]:*+
+----
+               Place   Latitude   Longitude         Country       Continent  \
+0             Bamako    12.6354     -8.0023            Mali          Africa   
+1             Niamey    13.5130      2.1151           Niger          Africa   
+2     Southern Chile   -39.8234    -73.0691           Chile   South America   
+3           Freetown     8.4815    -13.2315    Sierra Leone          Africa   
+4             Bamako    12.6422     -7.9990            Mali          Africa   
+...              ...        ...         ...             ...             ...   
+1260          Banjul    13.4498    -16.5883          Gambia          Africa   
+1261           Dakar    14.6920    -17.4459         Senegal          Africa   
+1262    Yamoussoukro     6.8198     -5.2756   Côte d'Ivoire          Africa   
+1263          Banjul    13.4528    -16.5874          Gambia          Africa   
+1264         Abidjan     5.3605     -4.0111   Côte d'Ivoire          Africa   
+
+       Magnitude  
+0            4.7  
+1            5.7  
+2            4.9  
+3            4.8  
+4            5.3  
+...          ...  
+1260         4.7  
+1261         4.7  
+1262         4.7  
+1263         4.8  
+1264         5.8  
+
+[1265 rows x 6 columns]
+----
+
+
++*In[4]:*+
+[source, ipython3]
+----
+#display the head of the dataframe
+print(df.head())
+----
+
+
++*Out[4]:*+
+----
+            Place   Latitude   Longitude        Country       Continent  \
+0          Bamako    12.6354     -8.0023           Mali          Africa   
+1          Niamey    13.5130      2.1151          Niger          Africa   
+2  Southern Chile   -39.8234    -73.0691          Chile   South America   
+3        Freetown     8.4815    -13.2315   Sierra Leone          Africa   
+4          Bamako    12.6422     -7.9990           Mali          Africa   
+
+    Magnitude  
+0         4.7  
+1         5.7  
+2         4.9  
+3         4.8  
+4         5.3  
+----
+
+
++*In[11]:*+
+[source, ipython3]
+----
+df.columns
+----
+
+
++*Out[11]:*+
+----Index(['Index', 'Magnitude '], dtype='object')----
+
+
++*In[14]:*+
+[source, ipython3]
+----
+# Access the "Magnitude" column
+magnitude_column = df['Magnitude ']
+
+# Plot the bar graph for "Magnitude" column
+plt.figure(figsize=(10, 6))
+plt.bar(df.index, magnitude_column, color='skyblue')
+plt.xlabel('Index')
+plt.ylabel('Magnitude')
+plt.title('Bar graph of Earthquake Magnitudes')
+plt.show()
+----
+
+
++*Out[14]:*+
+----
+![png](output_3_0.png)
+----
+
+
++*In[41]:*+
+[source, ipython3]
+----
+#plot the line graph
+x_axis = df['Index']
+y_axis = df['Magnitude ']
+plt.figure(figsize=(10, 6))
+plt.plot(x_axis, y_axis)  # Connect data points with a line
+plt.xlabel('Index')  # Label the x-axis
+plt.ylabel('Magnitude')  # Label the y-axis
+plt.title('Line Graph of Magnitude column ')  # Add a title
+plt.show()
+----
+
+
++*Out[41]:*+
+----
+![png](output_4_0.png)
+----
+
+
++*In[33]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[24]:*+
+[source, ipython3]
+----
+# Display basic statistics of the dataset
+print(df.describe())
+
+----
+
+
++*Out[24]:*+
+----
+          Index  Magnitude 
+count  5.000000    5.000000
+mean   3.000000   30.000000
+std    1.581139   15.811388
+min    1.000000   10.000000
+25%    2.000000   20.000000
+50%    3.000000   30.000000
+75%    4.000000   40.000000
+max    5.000000   50.000000
+----
+
+
++*In[15]:*+
+[source, ipython3]
+----
+# Convert non-numeric columns to numeric, ignoring errors
+df=df.apply(pd.to_numeric, errors='ignore')
+# Identify columns with non-numeric values
+non_numeric_columns =df.select_dtypes(exclude=['number']).columns
+# Print the columns with non-numeric values 
+print("Columns with non-numeric values:")
+print(non_numeric_columns)
+# Handle non-numeric values (e.g., replace with NaN)
+for column in non_numeric_columns:
+    df[column] = pd.to_numeric(df[column], errors='coerce')
+# Calculate correlation matrix 
+correlation_matrix =df.corr()
+print(correlation_matrix)
+----
+
+
++*Out[15]:*+
+----
+Columns with non-numeric values:
+Index(['Place', ' Country', ' Continent'], dtype='object')
+            Place   Latitude   Longitude   Country   Continent   Magnitude
+Place         NaN        NaN         NaN       NaN         NaN         NaN
+ Latitude     NaN   1.000000    0.162509       NaN         NaN   -0.024790
+ Longitude    NaN   0.162509    1.000000       NaN         NaN   -0.051251
+ Country      NaN        NaN         NaN       NaN         NaN         NaN
+ Continent    NaN        NaN         NaN       NaN         NaN         NaN
+ Magnitude    NaN  -0.024790   -0.051251       NaN         NaN    1.000000
+----
+
+
++*In[32]:*+
+[source, ipython3]
+----
+# Plot a heatmap of the correlation matrix
+correlation_matrix =df.corr()
+plt.figure(figsize=(10, 6))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+plt.title('Correlation Matrix Heatmap')
+plt.show()
+----
+
+
++*Out[32]:*+
+----
+![png](output_8_0.png)
+----
+
+
++*In[44]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[45]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
